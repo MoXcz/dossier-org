@@ -2,10 +2,28 @@
 
 API for dossier management
 
+App:
+
+```sh
+docker build . -t dossier-org
+```
+
 Postgres:
 
 ```sh
-docker run --name postgres-dossier -e POSTGRES_PASSWORD=<password> -p 5432:5432 -d postgres
+docker run --name dossier-db -e POSTGRES_PASSWORD=<password> -p 5432:5432 -d postgres
+```
+
+Migrations:
+
+```sh
+goose up
+```
+
+Docker compose:
+
+```sh
+docker compose up
 ```
 
 ## Endpoints
@@ -62,3 +80,6 @@ The error response (TODO):
 }
 ```
 
+## References
+
+1. https://github.com/vishnubob/wait-for-it

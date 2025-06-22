@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:17.5
+    container_name: dossier-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: dossier-app
+    restart: on-failure
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command: ["./entrypoint.sh"]
+    ports:
+      - "8080:8080"
+
+volumes:
+  db-data:
