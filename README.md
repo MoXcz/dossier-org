@@ -42,9 +42,9 @@ Body of the request should include:
 
 ```json
 {
-  "name": "string",     // Name of user
-  "email": "string",    // Email address of user
-  "password": "string"  // Password of user
+  "name": "string",
+  "email": "string",
+  "password": "string"
 }
 ```
 
@@ -76,7 +76,7 @@ The error response (TODO):
 
 ```json
 {
-  "error": ["string",]     // Description of the errors
+  "error": ["string", "string"]
 }
 ```
 
