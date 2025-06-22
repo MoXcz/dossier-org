@@ -18,12 +18,12 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 
 COPY --from=builder /usr/local/bin/app /usr/local/bin/app
 COPY --from=builder /go/bin/goose /usr/local/bin/goose
-COPY ./db /db
 
 WORKDIR /app
 
 COPY .env .
 COPY wait-for-it.sh .
+COPY ./db/schema/ ./db/schema
 
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x ./entrypoint.sh
