@@ -49,7 +49,7 @@ func (h *UserHandler) HandleGetPostUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if errors := params.Validate(); len(errors) > 0 {
-		return respJSON(w, http.StatusBadRequest, errors)
+		return respJSON(w, http.StatusBadRequest, map[string]any{"error": errors})
 	}
 
 	user, err := models.NewUserFromParams(params)
