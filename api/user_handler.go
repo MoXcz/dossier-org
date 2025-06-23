@@ -62,20 +62,12 @@ func (h *UserHandler) HandleGetUsers(w http.ResponseWriter, r *http.Request) err
 func (h *UserHandler) HandleGetUser(w http.ResponseWriter, r *http.Request) error {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
-		return APIError{
-			Status: http.StatusBadRequest,
-			Msg:    "invalid ID",
-			Err:    err,
-		}
+		return APIError{Status: http.StatusBadRequest, Msg: "invalid ID", Err: err}
 	}
 
 	user, err := h.userStore.GetUserByID(r.Context(), int32(id))
 	if errors.Is(err, sql.ErrNoRows) {
-		return APIError{
-			Status: http.StatusBadRequest,
-			Msg:    fmt.Sprintf("invalid ID: there are no users with ID %d", id),
-			Err:    err,
-		}
+		return APIError{Status: http.StatusBadRequest, Msg: fmt.Sprintf("invalid ID: there are no users with ID %d", id), Err: err}
 	} else if err != nil {
 		return err
 	}
