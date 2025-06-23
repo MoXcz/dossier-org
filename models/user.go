@@ -13,22 +13,24 @@ const (
 	minPasswordLen = 7
 )
 
+// server-side parameters
 type CreateUserParams struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-func (params CreateUserParams) Validate() []string {
-	errors := []string{}
+// TODO: Return APIValidateUserError and then adjust the returned struct
+func (params CreateUserParams) Validate() map[string]string {
+	errors := map[string]string{}
 	if len(params.Name) < minNameLen {
-		errors = append(errors, fmt.Sprintf("name lenght should be at least %d characters", minNameLen))
+		errors["name"] = fmt.Sprintf("name length should be at least %d characters", minNameLen)
 	}
 	if len(params.Password) < minPasswordLen {
-		errors = append(errors, fmt.Sprintf("password lenght should be at least %d characters", minPasswordLen))
+		errors["password"] = fmt.Sprintf("password length should be at least %d characters", minPasswordLen)
 	}
 	if !isEmailValid(params.Email) {
-		errors = append(errors, "email is invalid")
+		errors["email"] = "email is invalid"
 	}
 	return errors
 }
@@ -38,6 +40,7 @@ func isEmailValid(e string) bool {
 	return emailRegex.MatchString(e)
 }
 
+// client-side parameters
 type User struct {
 	ID                int32  `json:"id,omitempty"`
 	Name              string `json:"name"`

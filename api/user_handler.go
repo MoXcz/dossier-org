@@ -1,7 +1,9 @@
 package api
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -26,11 +28,11 @@ func (h *UserHandler) HandleGetPostUser(w http.ResponseWriter, r *http.Request) 
 	var params models.CreateUserParams
 	err := decoder.Decode(&params)
 	if err != nil {
-		return err
+		return APIError{Status: http.StatusBadRequest, Err: err, Msg: "invalid JSON"}
 	}
 
 	if errors := params.Validate(); len(errors) > 0 {
-		return respJSON(w, http.StatusBadRequest, map[string]any{"error": errors})
+		return APIValidateUserError{Status: http.StatusBadRequest, Errors: errors, Msg: "invalid parameters"}
 	}
 
 	user, err := models.NewUserFromParams(params)
@@ -59,9 +61,22 @@ func (h *UserHandler) HandleGetUsers(w http.ResponseWriter, r *http.Request) err
 
 func (h *UserHandler) HandleGetUser(w http.ResponseWriter, r *http.Request) error {
 	id, err := strconv.Atoi(r.PathValue("id"))
-	fmt.Println(id)
-	user, err := h.userStore.GetUserByID(r.Context(), int32(id))
 	if err != nil {
+		return APIError{
+			Status: http.StatusBadRequest,
+			Msg:    "invalid ID",
+			Err:    err,
+		}
+	}
+
+	user, err := h.userStore.GetUserByID(r.Context(), int32(id))
+	if errors.Is(err, sql.ErrNoRows) {
+		return APIError{
+			Status: http.StatusBadRequest,
+			Msg:    fmt.Sprintf("invalid ID: there are no users with ID %d", id),
+			Err:    err,
+		}
+	} else if err != nil {
 		return err
 	}
 
