@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/MoXcz/dossier-org/db"
+	"github.com/MoXcz/dossier-org/helpers"
 	"github.com/joho/godotenv"
 )
 
@@ -13,12 +14,12 @@ func Routes() http.Handler {
 
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
-		Logger.Error("DB_URL variable must be defined (use a .env file)", "DB_URL", dbURL)
+		helpers.Logger.Info("DB_URL variable must be defined (use a .env file)", "DB_URL", dbURL)
 	}
 
 	sqlDB, err := db.OpenDB(dbURL)
 	if err != nil {
-		Logger.Error(err.Error())
+		helpers.Logger.Error(err.Error())
 		os.Exit(1)
 	}
 

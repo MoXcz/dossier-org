@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/MoXcz/dossier-org/api"
+	"github.com/MoXcz/dossier-org/helpers"
 	_ "github.com/lib/pq"
 )
 
@@ -13,8 +14,8 @@ func main() {
 	listenAddr := flag.String("addr", ":8080", "HTTP network address")
 	flag.Parse()
 
-	api.Logger.Info("starting server", "addr", *listenAddr)
+	helpers.Logger.Info("starting server", "addr", *listenAddr)
 	err := http.ListenAndServe(*listenAddr, api.Routes())
-	api.Logger.Error(err.Error())
+	helpers.Logger.Error(err.Error())
 	os.Exit(1)
 }

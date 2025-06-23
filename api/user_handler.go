@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -11,24 +10,6 @@ import (
 	"github.com/MoXcz/dossier-org/internal/database"
 	"github.com/MoXcz/dossier-org/models"
 )
-
-type AppHandlerFunc func(w http.ResponseWriter, r *http.Request) error
-
-func Make(handler AppHandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			if rec := recover(); rec != nil {
-				log.Printf("panic: %v", rec)
-				http.Error(w, "internal server error", http.StatusInternalServerError)
-			}
-		}()
-
-		if err := handler(w, r); err != nil {
-			log.Printf("handler error: %v", err)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	}
-}
 
 type UserHandler struct {
 	userStore db.UserStore
