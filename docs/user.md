@@ -44,7 +44,7 @@ curl --request POST \
   --data '{
   "name": "a",
   "email": "@mail.com",
-  "password": "a1234567"
+  "password": "a"
 }'
 ```
 
@@ -52,10 +52,11 @@ The error response when the name, email, password are *incorrect*:
 
 ```json
 {
-  "error": [
-    "name lenght should be at least 2 characters",
-    "email is invalid"
-  ]
+  "error": {
+    "email": "email is invalid",
+    "name": "name length should be at least 2 characters",
+    "password": "password length should be at least 7 characters"
+  }
 }
 ```
 
