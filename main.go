@@ -16,6 +16,7 @@ func main() {
 
 	helpers.Logger.Info("starting server", "addr", *listenAddr)
 	err := http.ListenAndServe(*listenAddr, api.Routes())
+
 	helpers.Logger.Error(err.Error())
 	os.Exit(1)
 }
