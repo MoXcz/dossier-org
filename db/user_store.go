@@ -8,7 +8,7 @@ import (
 )
 
 type UserStore interface {
-	GetUserByID(context.Context, int32) (*database.User, error)
+	GetUserByID(context.Context, int64) (*database.User, error)
 	GetUsers(context.Context) ([]database.User, error)
 	CreateUser(context.Context, *database.CreateUserParams) (*database.User, error)
 }
@@ -32,7 +32,7 @@ func (s *PostgresUserStore) CreateUser(ctx context.Context, user *database.Creat
 	return &createdUser, nil
 }
 
-func (s *PostgresUserStore) GetUserByID(ctx context.Context, id int32) (*database.User, error) {
+func (s *PostgresUserStore) GetUserByID(ctx context.Context, id int64) (*database.User, error) {
 	createdUser, err := s.db.GetUserFromID(ctx, id)
 	if err != nil {
 		return nil, err

@@ -51,7 +51,7 @@ SELECT id, name, email, encryptedpassword FROM users
 WHERE id = $1
 `
 
-func (q *Queries) GetUserFromID(ctx context.Context, id int32) (User, error) {
+func (q *Queries) GetUserFromID(ctx context.Context, id int64) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUserFromID, id)
 	var i User
 	err := row.Scan(
