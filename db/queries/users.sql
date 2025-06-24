@@ -12,7 +12,7 @@ SELECT * FROM users
 WHERE id = $1;
 
 -- name: DeleteUsers :exec
-DELETE FROM users;
+TRUNCATE users RESTART IDENTITY;
 
 -- name: GetUsers :many
 SELECT * from users;

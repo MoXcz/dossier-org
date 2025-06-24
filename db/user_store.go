@@ -11,6 +11,7 @@ type UserStore interface {
 	GetUserByID(context.Context, int64) (*database.User, error)
 	GetUsers(context.Context) ([]database.User, error)
 	CreateUser(context.Context, *database.CreateUserParams) (*database.User, error)
+	Drop(context.Context) error
 }
 
 type PostgresUserStore struct {
@@ -48,4 +49,8 @@ func (s *PostgresUserStore) GetUsers(ctx context.Context) ([]database.User, erro
 	}
 
 	return users, nil
+}
+
+func (s *PostgresUserStore) Drop(ctx context.Context) error {
+	return s.db.DeleteUsers(ctx)
 }
