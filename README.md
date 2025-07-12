@@ -33,5 +33,12 @@ docker compose up
 | GET    | `/user/{id}` | Retrieve a single user by ID |
 | GET    | `/user`      | Retrieve a list of all users |
 | POST   | `/user`      | Create a new user            |
+| GET   | `/user/{id}/dossier`      | Get dossiers from user by ID|
+| POST   | `/dossier`      | Create dossier and assign it to user |
 
 
+# TO-DO
+
+- [ ] Add auth
+- [ ] First create dosser, then assign it?
+- [ ] Add permissions
