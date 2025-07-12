@@ -1,10 +1,9 @@
 #!/bin/bash
 
-echo "Waiting for PostgreSQL..."
-./wait-for-it.sh db:5432 --timeout=30 --strict -- echo "PostgreSQL is up."
+echo "Running migrations..." && \
+  goose up || \
+  echo "Error when running migrations"
 
-echo "Running migrations..."
-goose up
-
-echo "Starting application..."
-exec /usr/local/bin/app
+echo "Starting application..." && \
+  exec /usr/local/bin/app || \
+  echo "Error when starting application"

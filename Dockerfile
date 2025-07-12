@@ -22,7 +22,6 @@ COPY --from=builder /go/bin/goose /usr/local/bin/goose
 WORKDIR /app
 
 COPY .env .
-COPY wait-for-it.sh .
 COPY ./db/schema/ ./db/schema
 
 COPY entrypoint.sh entrypoint.sh

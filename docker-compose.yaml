@@ -13,13 +13,19 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   app:
     build: .
     container_name: dossier-app
     restart: on-failure
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     env_file:
       - .env
     command: ["./entrypoint.sh"]

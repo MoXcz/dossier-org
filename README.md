@@ -34,6 +34,4 @@ docker compose up
 | GET    | `/user`      | Retrieve a list of all users |
 | POST   | `/user`      | Create a new user            |
 
-## References
 
-1. https://github.com/vishnubob/wait-for-it
