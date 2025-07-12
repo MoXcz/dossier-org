@@ -40,9 +40,19 @@ func (err APIError) Error() string {
 type APIValidateUserError struct {
 	Status int
 	Msg    string
-	Errors map[string]string
+	Errors map[string]string // Name, Email, Passowrd, RoleID
 }
 
 func (err APIValidateUserError) Error() string {
+	return err.Msg
+}
+
+type APIValidateDossierError struct {
+	Status int
+	Msg    string
+	Errors map[string]string // Title, Data, AssignedTo
+}
+
+func (err APIValidateDossierError) Error() string {
 	return err.Msg
 }

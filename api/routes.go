@@ -23,12 +23,20 @@ func Routes() http.Handler {
 		os.Exit(1)
 	}
 
-	userHandler := NewUserHandler(db.NewPostgresUserStore(sqlDB))
-	mux := http.NewServeMux()
+	var (
+		userHandler    = NewUserHandler(db.NewPostgresUserStore(sqlDB))
+		dossierHandler = NewDossierHandler(db.NewPostgresDossierStore(sqlDB))
+		mux            = http.NewServeMux()
+	)
 
+	// users
 	mux.HandleFunc("GET /user/{id}", Make(userHandler.HandleGetUser))
 	mux.HandleFunc("GET /user", Make(userHandler.HandleGetUsers))
 	mux.HandleFunc("POST /user", Make(userHandler.HandleGetPostUser))
+
+	// dossiers
+	mux.HandleFunc("GET /user/{id}/dossier", Make(dossierHandler.HandleGetDossiers))
+	mux.HandleFunc("POST /dossier", Make(dossierHandler.HandleGetPostDossier))
 
 	return mux
 }

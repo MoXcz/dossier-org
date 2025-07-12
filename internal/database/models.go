@@ -4,11 +4,39 @@
 
 package database
 
+import (
+	"database/sql"
+	"encoding/json"
+	"time"
+)
+
+type Dossier struct {
+	DossierID  int64           `json:"dossier_id"`
+	Title      string          `json:"title"`
+	Data       json.RawMessage `json:"data"`
+	AssignedTo int64           `json:"assigned_to"`
+	CreatedAt  time.Time       `json:"created_at"`
+}
+
+type EmployeeProfile struct {
+	UserID int64 `json:"user_id"`
+}
+
+type Permission struct {
+	PermissionID int32          `json:"permission_id"`
+	Name         string         `json:"name"`
+	Description  sql.NullString `json:"description"`
+}
 
 type Role struct {
 	RoleID      int32  `json:"role_id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+}
+
+type RolePermission struct {
+	RoleID       int32 `json:"role_id"`
+	PermissionID int32 `json:"permission_id"`
 }
 
 type User struct {
