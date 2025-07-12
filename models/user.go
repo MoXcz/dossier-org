@@ -18,6 +18,7 @@ type CreateUserParams struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	RoleID   int32  `json:"role_id"`
 }
 
 // TODO: Return APIValidateUserError and then adjust the returned struct
@@ -32,6 +33,10 @@ func (params CreateUserParams) Validate() map[string]string {
 	if !isEmailValid(params.Email) {
 		errors["email"] = "email is invalid"
 	}
+	// TODO: Validate user id; wait until auth, test only purposes
+	if params.RoleID != 1 && params.RoleID != 2 {
+		errors["role_id"] = "role is not valid"
+	}
 	return errors
 }
 
@@ -42,10 +47,11 @@ func isEmailValid(e string) bool {
 
 // client-side parameters
 type User struct {
-	ID                int64  `json:"id,omitempty"`
-	Name              string `json:"name"`
-	Email             string `json:"email"`
-	EncryptedPassword string `json:"-"`
+	ID           int64  `json:"id,omitempty"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	RoleID       int32  `json:"role_id"` // probably best to send the name
+	HashPassword string `json:"-"`
 }
 
 func NewUserFromParams(params CreateUserParams) (*User, error) {
@@ -54,8 +60,9 @@ func NewUserFromParams(params CreateUserParams) (*User, error) {
 		return nil, err
 	}
 	return &User{
-		Name:              params.Name,
-		Email:             params.Email,
-		EncryptedPassword: string(encpwd),
+		Name:         params.Name,
+		Email:        params.Email,
+		HashPassword: string(encpwd),
+		RoleID:       params.RoleID,
 	}, nil
 }

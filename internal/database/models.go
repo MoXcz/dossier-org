@@ -4,9 +4,17 @@
 
 package database
 
+
+type Role struct {
+	RoleID      int32  `json:"role_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 type User struct {
-	ID                int64  `json:"id"`
-	Name              string `json:"name"`
-	Email             string `json:"email"`
-	Encryptedpassword string `json:"encryptedpassword"`
+	UserID       int64  `json:"user_id"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	PasswordHash string `json:"password_hash"`
+	RoleID       int32  `json:"role_id"`
 }

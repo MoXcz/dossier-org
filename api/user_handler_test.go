@@ -55,6 +55,7 @@ func TestPostUser(t *testing.T) {
 		Name:     "Jane",
 		Email:    "jane@mail.com",
 		Password: "Jane12345!",
+		RoleID:   1,
 	}
 	b, _ := json.Marshal(params)
 
@@ -68,7 +69,7 @@ func TestPostUser(t *testing.T) {
 	if user.ID < 0 {
 		t.Error("expecting a valid user id to be set")
 	}
-	if len(user.EncryptedPassword) > 0 {
+	if len(user.HashPassword) > 0 {
 		t.Error("expected encrypted password to not be included in response")
 	}
 	if user.Name != params.Name {
@@ -76,6 +77,9 @@ func TestPostUser(t *testing.T) {
 	}
 	if user.Email != params.Email {
 		t.Errorf("expected first name %s but got %s", params.Email, user.Email)
+	}
+	if user.RoleID != params.RoleID {
+		t.Errorf("expected role id %d but got %d", params.RoleID, user.RoleID)
 	}
 
 	fmt.Println(user)

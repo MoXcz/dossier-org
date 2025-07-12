@@ -10,35 +10,43 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (name, email, encryptedPassword)
+INSERT INTO users (name, email, password_hash, role_id)
 VALUES (
     $1,
     $2,
-    $3
+    $3,
+    $4
 )
-RETURNING id, name, email, encryptedpassword
+RETURNING user_id, name, email, password_hash, role_id
 `
 
 type CreateUserParams struct {
-	Name              string `json:"name"`
-	Email             string `json:"email"`
-	Encryptedpassword string `json:"encryptedpassword"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	PasswordHash string `json:"password_hash"`
+	RoleID       int32  `json:"role_id"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.Name, arg.Email, arg.Encryptedpassword)
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.Name,
+		arg.Email,
+		arg.PasswordHash,
+		arg.RoleID,
+	)
 	var i User
 	err := row.Scan(
-		&i.ID,
+		&i.UserID,
 		&i.Name,
 		&i.Email,
-		&i.Encryptedpassword,
+		&i.PasswordHash,
+		&i.RoleID,
 	)
 	return i, err
 }
 
 const deleteUsers = `-- name: DeleteUsers :exec
-TRUNCATE users RESTART IDENTITY
+DELETE FROM users
 `
 
 func (q *Queries) DeleteUsers(ctx context.Context) error {
@@ -47,24 +55,25 @@ func (q *Queries) DeleteUsers(ctx context.Context) error {
 }
 
 const getUserFromID = `-- name: GetUserFromID :one
-SELECT id, name, email, encryptedpassword FROM users
-WHERE id = $1
+SELECT user_id, name, email, password_hash, role_id FROM users
+WHERE user_id = $1
 `
 
-func (q *Queries) GetUserFromID(ctx context.Context, id int64) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserFromID, id)
+func (q *Queries) GetUserFromID(ctx context.Context, userID int64) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserFromID, userID)
 	var i User
 	err := row.Scan(
-		&i.ID,
+		&i.UserID,
 		&i.Name,
 		&i.Email,
-		&i.Encryptedpassword,
+		&i.PasswordHash,
+		&i.RoleID,
 	)
 	return i, err
 }
 
 const getUsers = `-- name: GetUsers :many
-SELECT id, name, email, encryptedpassword from users
+SELECT user_id, name, email, password_hash, role_id from users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -77,10 +86,11 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 	for rows.Next() {
 		var i User
 		if err := rows.Scan(
-			&i.ID,
+			&i.UserID,
 			&i.Name,
 			&i.Email,
-			&i.Encryptedpassword,
+			&i.PasswordHash,
+			&i.RoleID,
 		); err != nil {
 			return nil, err
 		}

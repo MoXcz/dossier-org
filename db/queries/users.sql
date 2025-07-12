@@ -1,18 +1,19 @@
 -- name: CreateUser :one
-INSERT INTO users (name, email, encryptedPassword)
+INSERT INTO users (name, email, password_hash, role_id)
 VALUES (
     $1,
     $2,
-    $3
+    $3,
+    $4
 )
 RETURNING *;
 
 -- name: GetUserFromID :one
 SELECT * FROM users
-WHERE id = $1;
+WHERE user_id = $1;
 
 -- name: DeleteUsers :exec
-TRUNCATE users RESTART IDENTITY;
+DELETE FROM users;
 
 -- name: GetUsers :many
 SELECT * from users;

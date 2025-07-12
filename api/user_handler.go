@@ -41,9 +41,10 @@ func (h *UserHandler) HandleGetPostUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	insteredUser, err := h.userStore.CreateUser(r.Context(), &database.CreateUserParams{
-		Name:              user.Name,
-		Email:             user.Email,
-		Encryptedpassword: user.EncryptedPassword,
+		Name:         user.Name,
+		Email:        user.Email,
+		PasswordHash: user.HashPassword,
+		RoleID:       user.RoleID,
 	})
 	if err != nil {
 		return err
